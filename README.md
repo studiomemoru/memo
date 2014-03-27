@@ -43,13 +43,28 @@ iOSアプリ開発メモ
 
 ### レイアウトがずれる件
 
-UIScrollViewおよび派生クラス（UITableView等）のスクロール上端がステータスバー分（20pt）下にずれる問題の解消
+UIScrollViewおよび派生クラス（UITableView等）のスクロール上端がステータスバー分（20pt）下にずれる問題の解消。
 
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
     	self.automaticallyAdjustsScrollViewInsets= NO;
     }
 
 （[UIViewController viewDidLoad]内に記述）
+
+### iOS7シミュレーターのみ、ナビゲーションバー絡みでレイアウトが崩れる件
+
+デフォルト状態のナビゲーションバーを表示していると実機ではずれていないのにiOS7シミュレーターのみずれる。
+以下で解消。
+
+    #if TARGET_IPHONE_SIMULATOR
+    	//--シミュレーター向けビルドした時のみ有効
+    	if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+    		self.navigationController.navigationBar.translucent= NO;
+    	}
+    #endif
+
+（[UIViewController viewDidLoad]内に記述）
+
 
 ### iOS7ボタン文字色
 
