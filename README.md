@@ -1,6 +1,27 @@
 iOSアプリ開発メモ
 ===============
 
+## Workspaceを使用して、依存関係にある複数プロジェクト（App + Frameworks）をビルドするようにしている場合の注意
+
+Cocoapods を使用している場合や、名前空間を分ける等の理由で自作Frameworkを使用している場合が該当。
+
+### 自作FrameworkをAppとリンクするための設定
+
+Appの TARGET 設定で、自作Frameworkファイルとリンクするよう設定する必要がある。
+
+その際、「Linked Frameworks and Libraries」に追加するだけでは駄目で、「Build Phases」タブ内で、Copy Files Phase を追加する必要がある。
+
+
+### 「親プロジェクト」(App) で Configuration を追加・変更したら、「子プロジェクト」(Pods, 自作Framework) も同様の Configuration 構成にする必要がある。
+
+これを行わないと、Swiftソースの、Frameworkをimportしている部分で
+「**No such module 'Hoge'**」
+というエラーになる。
+
+Cocoapods の場合、親プロジェクトを変更した後「pod update」をすれば自動で Pods プロジェクトを変更してくれる。
+自作の子プロジェクトは自分で設定しないといけない。
+
+
 ## 基本テクニック
 
 ### NSLog無効化
